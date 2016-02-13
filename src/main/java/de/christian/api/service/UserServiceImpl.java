@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import de.christian.api.dao.interfaces.IUserDao;
 import de.christian.api.model.News;
 import de.christian.api.model.Project;
+import de.christian.api.model.SimpleUserObject;
 import de.christian.api.model.User;
 import de.christian.api.service.interfaces.IUserService;
 
@@ -63,11 +64,36 @@ public class UserServiceImpl implements IUserService{
 	}
 
 	@Transactional
-	public User getById(final Long entityId) {
+	public User getByName(final String name) {
 		// TODO Auto-generated method stub
-		return dao.getById(entityId);
+		return dao.getUserByName(name);
 	}
-	
-	
 
+	@Transactional
+	public void deleteByName(final String name) {
+		// TODO Auto-generated method stub
+		dao.deleteByName(name);
+	}
+
+	@Transactional
+	public void registerUser(final User user, final String masterkey) {
+		// TODO Auto-generated method stub
+		dao.registerUser(user, masterkey);
+	}
+
+	public User getUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Transactional
+	public void updateByName(final String name, final SimpleUserObject entry) {
+		// TODO Auto-generated method stub
+		dao.updateByName(name, entry);
+	}
+
+	public User getById(Long entityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

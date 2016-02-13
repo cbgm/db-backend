@@ -1,8 +1,10 @@
 package de.christian.api.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +27,10 @@ import de.christian.api.model.GuestbookEntry;
 import de.christian.api.model.Image;
 import de.christian.api.model.News;
 import de.christian.api.model.Project;
+import de.christian.api.model.Role;
+import de.christian.api.model.SimpleUserObject;
 import de.christian.api.model.Tag;
+import de.christian.api.model.User;
 import de.christian.api.service.interfaces.IArticleService;
 import de.christian.api.service.interfaces.IGalleryService;
 import de.christian.api.service.interfaces.IGuestbookEntryService;
@@ -32,6 +38,7 @@ import de.christian.api.service.interfaces.IImageService;
 import de.christian.api.service.interfaces.INewsService;
 import de.christian.api.service.interfaces.IProjectService;
 import de.christian.api.service.interfaces.ITagService;
+import de.christian.api.service.interfaces.IUserService;
 
 @RestController
 //@RequestMapping(value = "/admin")
@@ -49,6 +56,8 @@ public class AdminController extends ExtendedController {
 	private IArticleService aService;
 	
 	private ITagService tagService;
+	
+	private IUserService userService;
 	
 	private IImageService iservice;
 	
@@ -287,6 +296,54 @@ public class AdminController extends ExtendedController {
 		galleryService = (IGalleryService) appContext.getBean("galleryService");
 		try {
 			galleryService.update(entry);
+		} catch (Exception ex) {
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "/admin/users/add", method = RequestMethod.POST)
+	public ResponseEntity<String> addUser(@RequestHeader(value = "referer", required = false) final String referer, @RequestBody final SimpleUserObject entry) {
+		userService = (IUserService) appContext.getBean("userService");
+		User temp = new User();
+		temp.setPassword(entry.getPassword());
+		temp.setUsername(entry.getUsername());
+		Role role = new Role();
+		role.setRole(entry.getRole());
+		role.setUser(temp);
+		ArrayList<Role> roles =  new  ArrayList<Role>();
+		roles.add(role);
+		temp.setRoles(new HashSet<Role>(roles));
+
+		try {
+			userService.save(temp);
+		} catch (Exception ex) {
+			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value="/admin/users/{name}", method = RequestMethod.DELETE)  
+	public ResponseEntity<String> deleteUserEntryByName(@RequestHeader(value = "referer", required = false) final String referer, @PathVariable("name") String username) {
+		userService = (IUserService) appContext.getBean("userService");
+
+		try {
+			userService.deleteByName(username);
+		} catch (Exception ex) {
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value="/admin/users/{name}", method = RequestMethod.PUT, consumes="application/json")
+	public ResponseEntity<String> updateUserEntryByName(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("name") String username, @RequestBody final SimpleUserObject entry) {
+		userService = (IUserService) appContext.getBean("userService");
+
+		try {
+			userService.updateByName(username, entry);
 		} catch (Exception ex) {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}

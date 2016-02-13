@@ -13,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
@@ -24,11 +26,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class User implements Model {
 
 	@Id
-	@GeneratedValue
-	private Long userId;
-	
-	@Column(name="name" ,nullable=false,length=50)
-	private String name;
+	@Column(name="username" ,nullable=false,length=50)
+	private String username;
 	
 	@Column(name="password",nullable=false,length=50)
 	private String password;
@@ -36,7 +35,7 @@ public class User implements Model {
 	@OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(
             name="user_project",
-            joinColumns = @JoinColumn( name="userId"),
+            joinColumns = @JoinColumn( name="username"),
             inverseJoinColumns = @JoinColumn( name="projectId")
     )
 	private Set<Project> projects = new HashSet<Project>();
@@ -44,34 +43,29 @@ public class User implements Model {
 	@OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(
             name="user_news",
-            joinColumns = @JoinColumn( name="userId"),
+            joinColumns = @JoinColumn( name="username"),
             inverseJoinColumns = @JoinColumn( name="newsId")
     )
 	private Set<News> news = new HashSet<News>();
+
+	@OneToMany(cascade = CascadeType.ALL ,mappedBy="user", fetch=FetchType.LAZY)
+    private Set<Role> roles = new HashSet<Role>();
 
 	public User(){
 		
 	}
 	
-	public User(String name, String passwordHash){
-		this.name = name;
+	public User(String username, String passwordHash){
+		this.username = username;
 		this.password = passwordHash;
 	}
 	
-	public Long getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserId(final Long userId) {
-		this.userId = userId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
+	public void setUsername(final String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -124,11 +118,32 @@ public class User implements Model {
 	public void setNews(final Set<News> news) {
 		this.news = news;
 	}
+
+	public void addRoles(final Role roles){
+		this.roles.add(roles);
+	}
 	
+	public void removeRole(final Role role){
+		this.roles.remove(role);
+	}
+	
+	public void removeRoles(){
+		this.news.clear();
+	}
+
+	
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(final Set<Role> roles) {
+		this.roles = roles;
+	}
+
 	public String toString(){
 		String temp = 
 			"[User:\n" 
-			+ "-name | " + name +"\n"
+			+ "-name | " + username +"\n"
 			+ "-password | " + password
 			+"\n]";
 		return temp;

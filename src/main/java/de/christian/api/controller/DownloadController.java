@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class DownloadController {
 
 	@RequestMapping(value = "/{file_name}", method = RequestMethod.GET, produces = "application/pdf")
-	public @ResponseBody byte[] downloadPDFFile(HttpServletResponse response, @PathVariable("file_name") String fileName)
-			throws IOException {
-
-		File file = new File(".." + File.separator + "docroot" +File.separator +  fileName + ".pdf");
+	public @ResponseBody byte[] downloadPDFFile(HttpServletResponse response, @PathVariable("file_name") String fileName) throws IOException {
+		//glassfish only
+//		String configFilePath = System.getProperty( "catalina.base") + File.separator + "docs" +File.separator +  fileName + ".pdf";
+		//tomcat only
+		File file = new File(System.getProperty( "catalina.base") + File.separator + "docs" +File.separator +  fileName + ".pdf");
 
 		response.setContentType("application/octet-stream");
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Content-Disposition","attachment;filename=" + file.getName() + ".pdf");
-		
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
 		response.setHeader("Pragma", "no-cache");
 		response.setHeader("Cache-Control", "no-cache");
