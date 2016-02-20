@@ -27,7 +27,7 @@ public class Image {
 	
 	@Column(name="dataUrl")
 	private String dataUrl;
-	
+
 	@ManyToMany(mappedBy="images")
 	private Set<Gallery> galleries = new HashSet<Gallery>();
 
@@ -54,6 +54,7 @@ public class Image {
 	public void setDataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
 	}
+
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "images")
 	public Set<Gallery> getGalleries() {

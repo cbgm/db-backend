@@ -14,6 +14,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -61,19 +62,43 @@ public class ImageController {
 		
 	}
 	
+//	@RequestMapping(value="/{id}", method = RequestMethod.GET, produces="image/png")
+//	public @ResponseBody byte[] getImageDataUrl(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id) throws IOException {
+//		iservice = (IImageService) appContext.getBean("imageService");
+//		Image image = iservice.getByIdOverride(id);
+//
+//		if (image != null) {
+//			String[] splittedUrl = image.getUrl().split(",");
+//			String cleanBase64Image =  splittedUrl[splittedUrl.length-1];
+//			byte[] imageData = Base64.decodeBase64(cleanBase64Image);
+//			ByteArrayOutputStream bao = new ByteArrayOutputStream();
+//			ByteArrayInputStream input = new ByteArrayInputStream(imageData);
+//			input.close();
+//			BufferedImage img = ImageIO.read(input);
+//			ImageIO.write(img, "png", bao);
+//			return bao.toByteArray();
+//		}
+//		return null;
+//		
+//
+//	}
+	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET, produces="image/png")
-	public @ResponseBody byte[] getImageDataUrl(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id) throws IOException {
+	public @ResponseBody byte[] getImageOriginalByName(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id) throws IOException {
 		iservice = (IImageService) appContext.getBean("imageService");
 		Image image = iservice.getByIdOverride(id);
 
-		if (image != null) {
-			String[] splittedUrl = image.getDataUrl().split(",");
-			String cleanBase64Image =  splittedUrl[splittedUrl.length-1];
-			byte[] imageData = Base64.decodeBase64(cleanBase64Image);
+		String savePathOriginal = System.getProperty( "catalina.base") + File.separator + "img" +File.separator + image.getName();
+		File file = new File(savePathOriginal);
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(file);
+		} catch (IOException e) {
+		}
+		
+		
+		if (img != null) {
 			ByteArrayOutputStream bao = new ByteArrayOutputStream();
-			ByteArrayInputStream input = new ByteArrayInputStream(imageData);
-			input.close();
-			BufferedImage img = ImageIO.read(input);
 			ImageIO.write(img, "png", bao);
 			return bao.toByteArray();
 		}
@@ -81,6 +106,29 @@ public class ImageController {
 		
 
 	}
-	
+
+	@RequestMapping(value="/thumb/{id}", method = RequestMethod.GET, produces="image/png")
+	public @ResponseBody byte[] getImageThumbByName(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id) throws IOException {
+		iservice = (IImageService) appContext.getBean("imageService");
+		Image image = iservice.getByIdOverride(id);
+
+		String savePathThumb = System.getProperty( "catalina.base") + File.separator + "img" +File.separator + "thumb" +File.separator +  image.getName();
+		File file = new File(savePathThumb);
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(file);
+		} catch (IOException e) {
+		}
+		
+		
+		if (img != null) {
+			ByteArrayOutputStream bao = new ByteArrayOutputStream();
+			ImageIO.write(img, "png", bao);
+			return bao.toByteArray();
+		}
+		return null;
+		
+
+	}
 	
 }
