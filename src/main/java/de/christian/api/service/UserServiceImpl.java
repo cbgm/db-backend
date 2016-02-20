@@ -96,4 +96,10 @@ public class UserServiceImpl implements IUserService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Transactional
+	public void save(SimpleUserObject entry) {
+		dao.save(entry);
+		
+	}
 }

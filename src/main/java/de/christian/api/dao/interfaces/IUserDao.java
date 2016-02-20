@@ -19,5 +19,6 @@ public interface IUserDao extends IGeneralDao<User, Long> {
 	public void deleteByName(final String name);
 	public void updateByName(final String name, final SimpleUserObject user);
 	public void registerUser(final User user, final String masterkey);
+	public void save(SimpleUserObject entry);
 
 }

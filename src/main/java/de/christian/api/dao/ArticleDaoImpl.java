@@ -44,6 +44,8 @@ public class ArticleDaoImpl extends GeneralDaoImpl<Article, Long> implements IAr
 		Article tempArticle = (Article) q.uniqueResult();
 		tempArticle.setContent(article.getContent());
 		tempArticle.setTitle(article.getTitle());
+		tempArticle.setContentAlt(article.getContentAlt());
+		tempArticle.setTitleAlt(article.getTitleAlt());
 		tempArticle.setTags(article.getTags());
 		
 	}

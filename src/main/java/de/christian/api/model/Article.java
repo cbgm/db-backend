@@ -34,6 +34,12 @@ public class Article implements Model{
 	@Column(name="content")
 	private String content;
 	
+	@Column(name="titleAlt")
+	private String titleAlt;
+
+	@Column(name="contentAlt")
+	private String contentAlt;
+	
 	@Column(name="date")
 	private String date;
 	
@@ -68,6 +74,22 @@ public class Article implements Model{
 
 	public void setTitle(final String title) {
 		this.title = title;
+	}
+	
+	public String getTitleAlt() {
+		return titleAlt;
+	}
+
+	public void setTitleAlt(String titleAlt) {
+		this.titleAlt = titleAlt;
+	}
+
+	public String getContentAlt() {
+		return contentAlt;
+	}
+
+	public void setContentAlt(String contentAlt) {
+		this.contentAlt = contentAlt;
 	}
 	
 	public String getDate() {

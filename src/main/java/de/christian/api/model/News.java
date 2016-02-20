@@ -34,16 +34,19 @@ public class News implements Model {
 	@Column(name="content")
 	private String content;
 	
+	@Column(name="titleAlt")
+	private String titleAlt;
+	
+	@Column(name="contentAlt")
+	private String contentAlt;
+	
 	@Column(name="date")
 	private String date;
-	
-//	@ManyToMany(cascade = { CascadeType.PERSIST },fetch =FetchType.EAGER)
-//    @JoinTable(name="news_tag", joinColumns={@JoinColumn(name="newsId")},inverseJoinColumns={@JoinColumn(name="tagId")})
+
 	@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "news_tag", joinColumns = @JoinColumn(name = "newsId"),
-            inverseJoinColumns = @JoinColumn(name = "tagId"))
+	@JoinTable(name = "news_tag", joinColumns = @JoinColumn(name = "newsId"),
+		inverseJoinColumns = @JoinColumn(name = "tagId"))
 	private Set<Tag> tags = new HashSet<Tag>();
-	
 	
 	public News(){
 		
@@ -66,7 +69,6 @@ public class News implements Model {
 	public String getTitle() {
 		return title;
 	}
-	
 
 	public void setTitle(final String title) {
 		this.title = title;
@@ -80,6 +82,22 @@ public class News implements Model {
 		this.content = content;
 	}
 	
+	public String getTitleAlt() {
+		return titleAlt;
+	}
+
+	public void setTitleAlt(String titleAlt) {
+		this.titleAlt = titleAlt;
+	}
+
+	public String getContentAlt() {
+		return contentAlt;
+	}
+
+	public void setContentAlt(String contentAlt) {
+		this.contentAlt = contentAlt;
+	}
+
 	public String getDate() {
 		return date;
 	}

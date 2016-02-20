@@ -37,7 +37,7 @@ public class GalleryController extends ExtendedController {
 
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<String> getNews(@RequestHeader(value = "referer", required = false) final String referer) {
+	public ResponseEntity<String> getGalleries(@RequestHeader(value = "referer", required = false) final String referer) {
 
 		galleryService = (IGalleryService) appContext.getBean("galleryService");
 		List<Gallery> entries = new ArrayList<Gallery>();
@@ -52,7 +52,7 @@ public class GalleryController extends ExtendedController {
 	}
 
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-	public ResponseEntity<String> getNewsEntryById(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id) {
+	public ResponseEntity<String> getGalleriesEntryById(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id) {
 
 		galleryService = (IGalleryService) appContext.getBean("galleryService");
 		Gallery entry = null;

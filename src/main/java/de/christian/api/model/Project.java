@@ -34,6 +34,12 @@ public class Project implements Model {
 	@Column(name="description")
 	private String description;
 	
+	@Column(name="titleAlt")
+	private String titleAlt;
+	
+	@Column(name="descriptionAlt")
+	private String descriptionAlt;
+
 	@Column(name="date")
 	private String date;
 	
@@ -68,6 +74,22 @@ public class Project implements Model {
 
 	public void setDescription(final String description) {
 		this.description = description;
+	}
+	
+	public String getTitleAlt() {
+		return titleAlt;
+	}
+
+	public void setTitleAlt(String titleAlt) {
+		this.titleAlt = titleAlt;
+	}
+
+	public String getDescriptionAlt() {
+		return descriptionAlt;
+	}
+
+	public void setDescriptionAlt(String descriptionAlt) {
+		this.descriptionAlt = descriptionAlt;
 	}
 	
 	public String getDate() {

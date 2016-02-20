@@ -103,6 +103,8 @@ public class ProjectDaoImpl extends GeneralDaoImpl<Project, Long> implements IPr
 		Project tempProject = (Project) q.uniqueResult();
 		tempProject.setDescription(project.getDescription());
 		tempProject.setTitle(project.getTitle());
+		tempProject.setDescriptionAlt(project.getDescriptionAlt());
+		tempProject.setTitleAlt(project.getTitleAlt());
 		tempProject.setTags(project.getTags());
 	}
 

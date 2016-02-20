@@ -294,6 +294,7 @@ public class AdminController extends ExtendedController {
 	public ResponseEntity<String> updateGalleryEntryById(@RequestHeader(value = "referer", required = false) final String referer,  @PathVariable("id") long id, @RequestBody final Gallery entry) {
 
 		galleryService = (IGalleryService) appContext.getBean("galleryService");
+
 		try {
 			galleryService.update(entry);
 		} catch (Exception ex) {
@@ -306,18 +307,9 @@ public class AdminController extends ExtendedController {
 	@RequestMapping(value = "/admin/users/add", method = RequestMethod.POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "referer", required = false) final String referer, @RequestBody final SimpleUserObject entry) {
 		userService = (IUserService) appContext.getBean("userService");
-		User temp = new User();
-		temp.setPassword(entry.getPassword());
-		temp.setUsername(entry.getUsername());
-		Role role = new Role();
-		role.setRole(entry.getRole());
-		role.setUser(temp);
-		ArrayList<Role> roles =  new  ArrayList<Role>();
-		roles.add(role);
-		temp.setRoles(new HashSet<Role>(roles));
 
 		try {
-			userService.save(temp);
+			userService.save(entry);
 		} catch (Exception ex) {
 			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
 		}

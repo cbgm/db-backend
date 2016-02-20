@@ -103,5 +103,18 @@ public class UserDaoImpl extends GeneralDaoImpl<User, Long> implements IUserDao 
 		role.setRole(entry.getRole());
 		this.sessionFactory.getCurrentSession().update(role);
 	}
+	
+	public void save(final SimpleUserObject entitiy) {
+		User temp = new User();
+		temp.setPassword(entitiy.getPassword());
+		temp.setUsername(entitiy.getUsername());
+		Role role = new Role();
+		role.setRole(entitiy.getRole());
+		role.setUser(temp);
+		ArrayList<Role> roles =  new  ArrayList<Role>();
+		roles.add(role);
+		temp.setRoles(new HashSet<Role>(roles));
+		this.sessionFactory.getCurrentSession().save(temp);
+	}
 
 }

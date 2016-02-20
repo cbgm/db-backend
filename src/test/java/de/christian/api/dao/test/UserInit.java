@@ -7,26 +7,26 @@ public class UserInit {
  
 	public static void main(String[] args) {
 		try {
-			String myDriver = "com.mysql.jdbc.Driver";
-			String myUrl = "jdbc:mysql://localhost:3306/webdb";
-			Class.forName(myDriver);
-			Connection conn = DriverManager.getConnection(myUrl, "root", "");
-			
-			
-			String password = "0000";
-			String username = "c";
-			String role = "ADMIN";
+//			String myDriver = "com.mysql.jdbc.Driver";
+//			String myUrl = "jdbc:mysql://localhost:3306/webdb";
+//			Class.forName(myDriver);
+//			Connection conn = DriverManager.getConnection(myUrl, "root", "");
+//			
+//			
+			String password = "admin";
+//			String username = "c";
+//			String role = "ADMIN";
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String hashedPassword = passwordEncoder.encode(password);
+			System.out.println(hashedPassword);
+//			Statement st = conn.createStatement();
 			
-			Statement st = conn.createStatement();
-			
-			st.executeUpdate("INSERT INTO user (username, password) "
-					+"VALUES ('" + username +  "', '" + hashedPassword +  "')");
-			st.executeUpdate("INSERT INTO user_roles (username, role) "
-					+"VALUES ('" + username +  "', '" + role +  "')");
-			
-			conn.close();
+//			st.executeUpdate("INSERT INTO user (username, password) "
+//					+"VALUES ('" + username +  "', '" + hashedPassword +  "')");
+//			st.executeUpdate("INSERT INTO user_roles (username, role) "
+//					+"VALUES ('" + username +  "', '" + role +  "')");
+//			
+//			conn.close();
 		}
 		catch (Exception e)
 		{
